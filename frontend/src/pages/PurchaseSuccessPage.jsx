@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShoppingBag, Sparkles, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
@@ -35,71 +35,83 @@ const PurchaseSuccessPage = () => {
     }
   }, [clearCart]);
 
-  if (isProcessing) return "Processing...";
+  if (isProcessing) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-4">
+        <div className="h-10 w-10 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-semibold text-gray-300">Finalizing your order...</p>
+      </div>
+    );
+  }
 
-  if (error) return `Error: ${error}`;
+  if (error) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
+        <p className="text-rose-400 font-semibold mb-4">Error: {error}</p>
+        <Link to="/" className="text-xs text-violet-400 underline">Return to Home</Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="h-screen flex items-center justify-center px-4">
+    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
-        gravity={0.1}
+        gravity={0.08}
         style={{ zIndex: 99 }}
-        numberOfPieces={700}
+        numberOfPieces={400}
         recycle={false}
       />
 
-      <div className="max-w-md w-full bg-gray-800 rounded-lg shadow-xl overflow-hidden relative z-10">
-        <div className="p-6 sm:p-8">
-          <div className="flex justify-center">
-            <CheckCircle className="text-fuchsia-700 w-16 h-16 mb-4" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-center text-fuchsia-700 mb-2">
-            Purchase Successful!
-          </h1>
+      <div className="max-w-md w-full rounded-3xl border border-violet-500/20 bg-slate-900/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative z-10 text-center">
+        {/* Success Icon */}
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-inner">
+          <CheckCircle2 size={40} />
+        </div>
 
-          <p className="text-gray-300 text-center mb-2">
-            Thank you for your order. {"We're"} processing it now.
-          </p>
-          <p className="text-fuchsia-700 text-center text-sm mb-6">
-            Check your email for order details and updates.
-          </p>
-          <div className="bg-gray-700 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-400">Order number</span>
-              <span className="text-sm font-semibold text-fuchsia-700">
-                #12345
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">Estimated delivery</span>
-              <span className="text-sm font-semibold text-fuchsia-700">
-                3-5 business days
-              </span>
-            </div>
-          </div>
+        <div className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300 mb-3">
+          <Sparkles size={12} />
+          <span>PAYMENT VERIFIED</span>
+        </div>
 
-          <div className="space-y-4">
-            <button
-              className="w-full bg-fuchsia-700 hover:bg-fuchsia-700 text-white font-bold py-2 px-4
-             rounded-lg transition duration-300 flex items-center justify-center"
-            >
-              <HandHeart className="mr-2" size={18} />
-              Thanks for trusting us!
-            </button>
-            <Link
-              to={"/"}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-fuchsia-700 font-bold py-2 px-4 
-            rounded-lg transition duration-300 flex items-center justify-center"
-            >
-              Continue Shopping
-              <ArrowRight className="ml-2" size={18} />
-            </Link>
+        <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">
+          Order Confirmed!
+        </h1>
+
+        <p className="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+          Thank you for trusting TrendWear. Your tailored pieces are being prepared by our fulfillment specialists.
+        </p>
+
+        {/* Order Details Card */}
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/50 p-4 mb-6 text-left space-y-2.5 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400">Order Reference</span>
+            <span className="font-mono font-bold text-violet-300">#TW-{Math.floor(100000 + Math.random() * 900000)}</span>
           </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400">Estimated Delivery</span>
+            <span className="font-semibold text-white">2 - 4 Business Days</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400">Confirmation Sent To</span>
+            <span className="font-semibold text-emerald-400">Your Registered Email</span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Link
+            to="/"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 py-3.5 px-6 text-sm font-bold text-white shadow-xl shadow-violet-600/30 hover:opacity-95 transition"
+          >
+            <ShoppingBag size={16} />
+            <span>Continue Shopping</span>
+            <ArrowRight size={15} />
+          </Link>
         </div>
       </div>
     </div>
   );
 };
+
 export default PurchaseSuccessPage;

@@ -18,9 +18,10 @@ export const useUserStore = create((set, get) => ({
 		try {
 			const res = await axios.post("/auth/signup", { name, email, password });
 			set({ user: res.data, loading: false });
+			toast.success(`Welcome to TrendWear, ${res.data.name || "friend"}! 🎉`);
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.message || "An error occurred");
+			toast.error(error.response?.data?.message || "An error occurred during signup");
 		}
 	},
 	login: async (email, password) => {
@@ -28,11 +29,11 @@ export const useUserStore = create((set, get) => ({
 
 		try {
 			const res = await axios.post("/auth/login", { email, password });
-
 			set({ user: res.data, loading: false });
+			toast.success(`Welcome back, ${res.data.name || "shopper"}! ✨`);
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.message || "An error occurred");
+			toast.error(error.response?.data?.message || "An error occurred during login");
 		}
 	},
 
@@ -40,6 +41,7 @@ export const useUserStore = create((set, get) => ({
 		try {
 			await axios.post("/auth/logout");
 			set({ user: null });
+			toast.success("Logged out successfully. See you again!");
 		} catch (error) {
 			toast.error(error.response?.data?.message || "An error occurred during logout");
 		}
@@ -71,8 +73,6 @@ export const useUserStore = create((set, get) => ({
 		}
 	},
 }));
-
-// TODO: Implement the axios interceptors for refreshing access token
 
 // Axios interceptor for token refresh
 let refreshPromise = null;
